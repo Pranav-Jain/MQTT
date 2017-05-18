@@ -1,6 +1,3 @@
-# Copyright (c) 2015 Nicolas JOUANIN
-#
-# See the file license.txt for copying permission.
 import logging
 import ssl
 import websockets
@@ -79,6 +76,9 @@ class Server:
 
     @asyncio.coroutine
     def acquire_connection(self):
+        #######################################################################
+
+        #######################################################################
         if self.semaphore:
             yield from self.semaphore.acquire()
         self.conn_count += 1
@@ -345,7 +345,6 @@ class Broker:
 
         remote_address, remote_port = writer.get_peer_info()
         self.logger.info("Connection from %s:%d on listener '%s'" % (remote_address, remote_port, listener_name))
-
         # Wait for first packet and expect a CONNECT
         try:
             handler, client_session = yield from BrokerProtocolHandler.init_from_connect(reader, writer, self.plugins_manager, loop=self._loop)
@@ -361,6 +360,21 @@ class Broker:
             yield from writer.close()
             self.logger.debug("Connection closed")
             return
+
+        ############################### Checking Read & Write Permissions ##############################
+        ClientID = client_session.client_id
+        if ClientID[0]=="P":
+            with open("mqtt/write.txt", "r") as f:
+                arr = f.readlines()
+            if ClientID[2:]+"\n" not in arr:
+                return
+
+        if ClientID[0]=="S":
+            with open("mqtt/read.txt", "r") as f:
+                arr = f.readlines()
+            if ClientID[2:]+"\n" not in arr:
+                return "1"
+        ################################################################################################
 
         if client_session.clean_session:
             # Delete existing session and create a new one
