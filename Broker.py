@@ -2,12 +2,9 @@ import logging
 import asyncio
 import os
 from mqtt.broker import Broker
-from mqtt.version import get_version
-from docopt import docopt
 from mqtt.utils import read_yaml_config
 
 logger = logging.getLogger(__name__)
-
 
 def main(*args, **kwargs):
 

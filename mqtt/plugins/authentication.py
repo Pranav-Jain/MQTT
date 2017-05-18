@@ -1,6 +1,3 @@
-# Copyright (c) 2015 Nicolas JOUANIN
-#
-# See the file license.txt for copying permission.
 import logging
 import asyncio
 from passlib.apps import custom_app_context as pwd_context
