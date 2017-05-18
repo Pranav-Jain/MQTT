@@ -5,11 +5,18 @@ def on_connect(client, userdata, rc):
 	print "Connected with result code"+str(rc)
 # Subscribing in on_connect() means that if we lose the connection and
 # reconnect then subscriptions will be renewed.
-	client.subscribe("hello/world")
+	client.subscribe("image")
+	client.subscribe("Message")
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
-	print "Topic: " +  msg.topic+'\nMessage: '+str(msg.payload)
+	if msg.topic=='image':
+		f = open('/Users/pranavjain/Desktop/output', 'w')
+   		f.write(msg.payload)
+   		print msg.payload
+   		f.close()
+   	else:
+   		print "\nTopic: " +  msg.topic+'\nMessage: '+str(msg.payload)
 
 client = mqtt.Client()
 client.on_connect = on_connect
