@@ -2,6 +2,8 @@ import logging
 import ssl
 import websockets
 import asyncio
+import time
+import datetime
 import sys
 import re
 from asyncio import Queue, CancelledError
@@ -76,9 +78,6 @@ class Server:
 
     @asyncio.coroutine
     def acquire_connection(self):
-        #######################################################################
-
-        #######################################################################
         if self.semaphore:
             yield from self.semaphore.acquire()
         self.conn_count += 1
@@ -169,6 +168,7 @@ class Broker:
         self._broadcast_queue = asyncio.Queue(loop=self._loop)
 
         self._broadcast_task = None
+        self.ClientID = ""
 
         # Init plugins manager
         context = BrokerContext(self)
@@ -362,18 +362,18 @@ class Broker:
             return
 
         ############################### Checking Read & Write Permissions ##############################
-        ClientID = client_session.client_id
-        if ClientID[0]=="P":
+        self.ClientID = client_session.client_id
+        if self.ClientID[0]=="P":
             with open("mqtt/write.txt", "r") as f:
-                arr = f.readlines()
-            if ClientID[2:]+"\n" not in arr:
+                arr = f.read().splitlines()
+            if self.ClientID[2:] not in arr:
                 return
 
-        if ClientID[0]=="S":
+        if self.ClientID[0]=="S":
             with open("mqtt/read.txt", "r") as f:
-                arr = f.readlines()
-            if ClientID[2:]+"\n" not in arr:
-                return "1"
+                arr = f.read().splitlines()
+            if self.ClientID[2:] not in arr:
+                return
         ################################################################################################
 
         if client_session.clean_session:
@@ -699,8 +699,36 @@ class Broker:
             'topic': topic,
             'data': data
         }
+        #print(topic)
         if force_qos:
             broadcast['qos'] = force_qos
+
+        try:
+            f=open(topic + ".txt", "a+")
+            ts = time.time()
+            st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+            data = data.decode('utf-8')
+            #print (type(data))w
+            data_raw = "["+st+"]  " + data + '\n'
+            #print(data_raw)
+            f.write(str(data_raw))
+            f.flush()
+            f.close()
+        except:
+                try:
+                    f = open(topic + ".txt", "w")
+                    ts = time.time()
+                    st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+                    data = data.decode('utf-8')
+                    #print (type(data))
+                    data_raw = "["+st+"]  " + data + '\n'
+                    #print(data_raw)
+                    f.write(data_raw)
+                    f.flush()
+                    f.close()
+                except:
+                    pass
+
         yield from self._broadcast_queue.put(broadcast)
 
     @asyncio.coroutine

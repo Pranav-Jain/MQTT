@@ -1,4 +1,5 @@
 import paho.mqtt.client as mqtt
+import json
 
 client_id = "Pranav"
 server = "localhost"
@@ -14,11 +15,12 @@ if option=='2':
 	mqttc.publish("Message", client_id+"@"+message)
 elif option=='1':
 	file = raw_input("Enter file path: ")
-	f=open(file, "rb")
+	f=open(file, "r")
 	fileContent = f.read()
-	byteArr = bytearray(fileContent)
-	mqttc.publish("image",byteArr)
+	#encoded = base64.encodestring(fileContent)
+
+	#byteArr = bytearray(fileContent)
+	mqttc.publish("image",json.JSONEncoder().encode(fileContent),0)
 else:
 	print "Wrong Choice"
 mqttc.loop(2)
-
