@@ -1,0 +1,17 @@
+[2017-05-20 12:46:10]  Listener 'default': 2 connections acquired
+[2017-05-20 12:46:10]  Connection from 127.0.0.1:51709 on listener 'default'
+[2017-05-20 12:46:10]  Delete session : session P_Pranav doesn't exist
+[2017-05-20 12:46:10]  Keep-alive timeout=62
+[2017-05-20 12:46:10]  'auth_anonymous' plugin result: True
+[2017-05-20 12:46:10]  'auth_file' plugin result: None
+[2017-05-20 12:46:10]  'broker_sys' plugin result: None
+[2017-05-20 12:46:10]  'packet_logger_plugin' plugin result: None
+[2017-05-20 12:46:10]  P_Pranav Start messages handling
+[2017-05-20 12:46:10]  Retained messages queue size: 0
+[2017-05-20 12:46:10]  Publishing 0 messages retained for session (client id=P_Pranav)
+[2017-05-20 12:46:12]  broadcasting application message from (client id=P_Pranav) on topic 'Message' to (client id=S_Pranav)
+[2017-05-20 12:46:12]  P_Pranav Result from wait_diconnect: None
+[2017-05-20 12:46:12]  Will flag: False
+[2017-05-20 12:46:12]  P_Pranav Disconnecting session
+[2017-05-20 12:46:12]  P_Pranav Client disconnected
+[2017-05-20 12:46:12]  Listener 'default': 1 connections acquired
