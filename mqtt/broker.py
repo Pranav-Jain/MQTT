@@ -373,18 +373,18 @@ class Broker:
             return
 
         ############################### Checking Read & Write Permissions ##############################
-        self.ClientID = client_session.client_id
-        if self.ClientID[0]=="P":
-            with open("mqtt/write.txt", "r") as f:
-                arr = f.read().splitlines()
-            if self.ClientID[2:] not in arr:
-                return
+        #self.ClientID = client_session.client_id
+        #if self.ClientID[0]=="P":
+            #with open("mqtt/write.txt", "r") as f:
+                #arr = f.read().splitlines()
+            #if self.ClientID[2:] not in arr:
+                #return
 
-        if self.ClientID[0]=="S":
-            with open("mqtt/read.txt", "r") as f:
-                arr = f.read().splitlines()
-            if self.ClientID[2:] not in arr:
-                return
+        #if self.ClientID[0]=="S":
+            #with open("mqtt/read.txt", "r") as f:
+                #arr = f.read().splitlines()
+            #if self.ClientID[2:] not in arr:
+                #return
         ################################################################################################
 
         if client_session.clean_session:
